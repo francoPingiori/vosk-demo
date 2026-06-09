@@ -1,0 +1,17 @@
+# Third-Party Notices
+
+This project uses the following open-source libraries:
+
+- **Vosk Speech Recognition** (Alpha Cephei)  
+  Licensed under the Apache 2.0 License  
+  https://github.com/alphacep/vosk-api
+
+- **PyQt5**  
+  Licensed under GPL/LGPL  
+  https://www.riverbankcomputing.com/software/pyqt/
+
+- **sounddevice**  
+  Licensed under the MIT License  
+  https://python-sounddevice.readthedocs.io/
+
+All third-party licenses are included in their respective distributions.
