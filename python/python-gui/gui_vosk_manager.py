@@ -4,7 +4,7 @@
 
 # gui_vosk_manager.py
 # this worker gets the raw data from the microphone
-# decode and pass them to the GUI 
+# decodes and passes them to the GUI 
 
 import queue
 import sys
