@@ -2,9 +2,9 @@
 # Licensed under the MIT License. See the LICENSE file in the project root for details.
 
 
-# prova6VoskKaldiRecognizer.py
-# Worker Vosk per prova6: progettato per funzionare in un QThread reale
-# fornisce i dati sotto forma di stringa dopo aver ascoltato l'audio
+# gui_vosk_manager.py
+# this worker gets the raw data from the microphone
+# decode and pass them to the GUI 
 
 import queue
 import sys
