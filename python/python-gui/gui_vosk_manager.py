@@ -10,7 +10,7 @@ import queue
 import sys
 import json
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PySite6.QtCore import QObject, Signal
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
 
@@ -22,10 +22,10 @@ q = queue.Queue()
 class VoskManager(QObject):
 
     # Qt signal to send the decoded text to the GUI
-    sigReading = pyqtSignal(str)
+    sigReading = Signal(str)
 
     # Qt signal to send a message to the GUI
-    sigMessage = pyqtSignal(str)
+    sigMessage = Signal(str)
 
     def __init__(self, model_path):
         super().__init__()
