@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QThread
 import sys
-
+import os
 import gui_vosk_manager
 
 # My main windows is MyWindow, derived from QDialog
@@ -69,10 +69,11 @@ class MyWindow(QDialog):
             self.tebMessage.append("Vosk already on")
             return
 
-        self.tebMessage.append("Swithcing on Vosk...")
+        self.tebMessage.append("Switching on Vosk...")
 
         # this is the language model path
-        model_path = "/home/user_vosk/models/it-small"
+        model_path = os.path.expanduser("~/models/it-small")
+
 
         # create a new myVoskManager for the new QThread
         # this object will emit a signal as there will be some data available
