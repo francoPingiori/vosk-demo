@@ -10,7 +10,7 @@ import queue
 import sys
 import json
 
-from PySite6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
 
