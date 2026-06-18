@@ -8,11 +8,11 @@
 # this file just manages the Graphic User Interface
 # VoskManager.py deals with vosk and the speech recognition
 
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QApplication, QToolBar,
     QVBoxLayout, QPushButton, QTextBrowser
 )
-from PyQt5.QtCore import QThread
+from PySide6.QtCore import QThread
 import sys
 
 import gui_vosk_manager
