@@ -23,7 +23,7 @@ class MyWindow(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Vosk and QPython5")
+        self.setWindowTitle("Vosk and PySide6")
         self.setGeometry(100, 100, 600, 400)
 
         # Main layout
