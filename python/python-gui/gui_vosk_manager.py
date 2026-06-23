@@ -45,12 +45,9 @@ class VoskManager(QObject):
     # Main method running in  QThread
     def run(self):
         self.sigMessage.emit("Run started")
-
-        # we load the model; the path was provided within the constructor
-
-        self.model = Model(self.model_path)
-
         try:
+            # we load the model; the path was provided within the constructor
+            self.model = Model(self.model_path)
             # Get audio devices info
             device_info = sd.query_devices(None, "input")
             sr = int(device_info["default_samplerate"])
