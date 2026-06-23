@@ -46,7 +46,7 @@ class VoskManager(QObject):
     def run(self):
         self.sigMessage.emit("Run started")
         try:
-            # we load the model; the path was provided within the constructor
+            #  Load the model; the path was provided within the constructor
             self.model = Model(self.model_path)
             # Get audio devices info
             device_info = sd.query_devices(None, "input")
