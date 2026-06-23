@@ -6,22 +6,34 @@
 # this app is based on test_microphone.py, an example provided by Alpha Cephei vosk
 # the project is divided in two parts:
 # this file just manages the Graphic User Interface
-# VoskManager.py deals with vosk and the speech recognition
+# gui_vosk_manager.py deals with vosk and the speech recognition
 
+import sys
+import os
+import argparse
 from PySide6.QtWidgets import (
     QDialog, QApplication, QToolBar,
     QVBoxLayout, QPushButton, QTextBrowser
 )
 from PySide6.QtCore import QThread
-import sys
-import os
 import gui_vosk_manager
 
-# My main windows is MyWindow, derived from QDialog
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="GUI test for Vosk + PySide6")
+    parser.add_argument(
+        "-m", "--model",
+        help="Path to the Vosk language model",
+        default=os.path.expanduser("~/models/it-small")
+    )
+    return parser.parse_args()
+
 
 class MyWindow(QDialog):
-    def __init__(self):
+    def __init__(self, model_path):
         super().__init__()
+
+        self.model_path = model_path
 
         self.setWindowTitle("Vosk and PySide6")
         self.setGeometry(100, 100, 600, 400)
@@ -61,37 +73,27 @@ class MyWindow(QDialog):
     # -------------------------
 
     def slotExit(self):
+        self.slotVoskOff()
         QApplication.instance().quit()
 
     def slotVoskOn(self):
-        # No double activation
         if self.myThread is not None and self.myThread.isRunning():
             self.tebMessage.append("Vosk already on")
             return
 
-        self.tebMessage.append("Switching on Vosk...")
-
-        # this is the language model path
-        model_path = os.path.expanduser("~/models/it-small")
-
+        self.tebMessage.append(f"Switching on Vosk using model: {self.model_path}")
 
         # create a new myVoskManager for the new QThread
-        # this object will emit a signal as there will be some data available
-        # we pass the model path as a constructor parameter
-        self.myVoskManager = gui_vosk_manager.VoskManager(model_path)
+        self.myVoskManager = gui_vosk_manager.VoskManager(self.model_path)
         self.myVoskManager.sigReading.connect(self.slotGetData)
         self.myVoskManager.sigMessage.connect(self.slotGetMessage)
-        # start myVoskManager
         self.myVoskManager.work = True
 
         # Create thread
         self.myThread = QThread()
-        # move myVoskManager into the new thread
         self.myVoskManager.moveToThread(self.myThread)
 
-        # start run() in the thread
         self.myThread.started.connect(self.myVoskManager.run)
-        # start the thread
         self.myThread.start()
 
         self.tebMessage.append("Vosk started")
@@ -99,40 +101,36 @@ class MyWindow(QDialog):
     def slotVoskOff(self):
         self.tebMessage.append("Switching off Vosk...")
 
-        # If Vosk was never started, nothing to do
         if not hasattr(self, "myVoskManager") or self.myVoskManager is None:
-          self.tebMessage.append("Vosk was not running")
-          return
+            self.tebMessage.append("Vosk was not running")
+            return
 
-        # Ask the worker to stop its loop
         self.myVoskManager.work = False
 
-        
         if self.myThread is not None:
-            self.myThread.quit()  # exit the loop of the secondary thread
-            self.myThread.wait()  # stop the main thread until the end of the secondary one
-            self.myThread = None  # clean the memory of the secondary thread
+            self.myThread.quit()
+            self.myThread.wait()
+            self.myThread = None
 
-        # destroy myVoskManager
-        self.myVoskManager= None
+        self.myVoskManager = None
 
         self.tebMessage.append("Vosk off")
 
     def slotGetData(self, data: str):
-        # print data
-        self.tebMessage.append("speech transcription: "+data)
-        print("DEBUG, speech transcription: ", data)
+        self.tebMessage.append("speech transcription: " + data)
+        print("DEBUG, speech transcription:", data)
 
     def slotGetMessage(self, message: str):
-        # print data
         self.tebMessage.append(message)
         print("DEBUG:", message)
+
 
 # -------------------------
 # Start application
 # -------------------------
 
 if __name__ == "__main__":
+    args = parse_arguments()
     app = QApplication(sys.argv)
-    myWindow = MyWindow()
+    myWindow = MyWindow(args.model)
     sys.exit(app.exec())
